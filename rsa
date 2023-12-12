@@ -3,8 +3,8 @@
 from fractions import gcd
 from sys import argv
 
-# Pollard's rho algorithm to find factors
 def pollards_rho(n):
+    # Implement Pollard's rho algorithm
     x = 2
     y = 2
     d = 1
@@ -16,20 +16,26 @@ def pollards_rho(n):
     if d != n:
         return d
 
-# Reads numbers from the file and factorizes them
-def read_file():
-    with open(argv[1]) as f:
-        for number in f:
-            num = int(number)
-            if num % 2 == 0:
-                # If number is even, print factorization immediately
-                print("{:d}={}*{}".format(num, num // 2, 2))
-            else:
-                # If number is odd, use Pollard's rho algorithm to factorize
-                p = pollards_rho(num)
-                f1 = p
-                f2 = int(num / p)
-                print("{}={}*{}".format(num, f1, f2))
+def factorize_number(number):
+    if number % 2 == 0:
+        # If the number is even, perform simple factorization
+        return [number // 2, 2]
+    else:
+        # Use Pollard's rho algorithm for odd numbers
+        p = pollards_rho(number)
+        return [p, number // p]
+
+def read_file(filename):
+    # Read numbers from the file passed as argument
+    with open(filename) as file:
+        for line in file:
+            num = int(line.strip())
+            factors = factorize_number(num)
+            print("{}={}*{}".format(num, factors[0], factors[1]))
 
 if __name__ == "__main__":
-    read_file()  # Calls the read_file function when the script is run
+    if len(argv) != 2:
+        print("Usage: ./rsa input_file.txt")
+    else:
+        input_file = argv[1]
+        read_file(input_file)
