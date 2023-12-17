@@ -1,23 +1,26 @@
-#! /usr/bin/env python3
-from sys import argv
+#!/usr/bin/env python3
 
-def factorize():
-    # Opens the file provided as a command-line argument
-    with open(argv[1]) as f:
-        # Loops through each line in the file
-        for number in f:
-            num = int(number)  # Converts the string number to an integer
-            flag = 0
-            # Checks for factors from 2 to half of the number
-            for i in range(2, int(num / 2) + 1, 1):
-                if num % i == 0:  # Checks if 'i' is a factor of 'num'
-                    # Prints the factorization in the required format
-                    print("{:d}={}*{}".format(num, num // i, i))
-                    flag = 1
-                    break
-            if flag == 0:
-                # Prints the number itself as the factorization (prime number case)
-                print("{:d}={}*{}".format(num, num, 1))
+from sys import argv
+import math
+
+def factorize(number):
+    for i in range(2, int(math.sqrt(number)) + 1):
+        if number % i == 0:
+            return i, number // i
+    return None, None
+
+def factorize_numbers(file_name):
+    with open(file_name, 'r') as file:
+        numbers = file.read().splitlines()
+        for num in numbers:
+            num = int(num)
+            factor1, factor2 = factorize(num)
+            if factor1 and factor2:
+                print(f"{num}={factor1}*{factor2}")
 
 if __name__ == "__main__":
-    factorize()  # Calls the factorize function when the script is run
+    if len(argv) != 2:
+        print("Usage: python3 your_script.py <file_name>")
+        exit(1)
+    file_name = argv[1]
+    factorize_numbers(file_name)
