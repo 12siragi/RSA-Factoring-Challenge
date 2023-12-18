@@ -1,0 +1,24 @@
+#!/usr/bin/python3
+
+
+from fractions import gcd
+from sys import argv
+def prime_factors(n):
+    factors = []
+    divisor = 2
+
+    while n > 1:
+        while n % divisor == 0:
+            factors.append(divisor)
+            n //= divisor
+        divisor += 1
+
+    return factors
+
+# Test cases
+numbers = [6, 77, 239821585064027, 2497885147362973]
+
+for num in numbers:
+    factors = prime_factors(num)
+    print(f"{num} = {' * '.join(map(str, factors))}")
+
